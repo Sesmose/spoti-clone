@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
+import SideBar from './Sidebar';
+import Body from './Body';
+import Footer from './Footer';
+import './Player.css'
 
 function Player(spotify) {
     return (
-        <div>
-            <h1>Welcome to SpotiClone</h1>
+        <div className="player">
+            <div className="player-body">
+            <SideBar/>
+            <Body/>
+            </div>
+            <Footer/>
         </div>
     )
 }
