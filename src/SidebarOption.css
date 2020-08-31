@@ -1,28 +1,29 @@
-.sidebarOptions{
+.sidebarOption {
     display: flex;
-    color: grey;
+    cursor: pointer;
     align-items: center;
     height: 40px;
-    cursor: pointer;
+    color: grey;
     transition: 200ms color ease-in;
-}
-
-.sidebarOptions:hover{
+  }
+  
+  .sidebarOption:hover {
     color: white;
-}
-.sidebar >hr{
+  }
+  
+  .sidebar > hr {
     border: 1px solid #282828;
     width: 90%;
     margin: 10px auto;
-}
-
-.sidebarOptionsIcon{
+  }
+  
+  .sidebarOption__icon {
+    padding-left: 10px;
     padding-right: 10px;
-    padding-right: 10px;
-}
-
-.sidebarOptions > p {
+  }
+  
+  .sidebarOption > p {
     margin-top: 10px;
     margin-left: 20px;
     font-size: 14px;
-}
+  }

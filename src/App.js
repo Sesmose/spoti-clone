@@ -1,61 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Login from './Login';
-import Player from './Player';
-import { getTokenUrl } from './spotify';
-import {useDataLayerValue} from './DataLayer'
-import SpotifyWebApi from 'spotify-web-api-js';
+import React, { useEffect } from "react";
+import SpotifyWebApi from "spotify-web-api-js";
+import { useStateValue } from "./StateProvider";
+import Player from "./Player";
+import { getTokenFromResponse } from "./spotify";
+import "./App.css";
+import Login from "./Login";
 
-// Récupération service spotify
-const spotify = new SpotifyWebApi();
+const s = new SpotifyWebApi();
 
 function App() {
-
-  const [token, setToken] =  useState(null)
-
-  const [{user}, dispatch] = useDataLayerValue();
+  const [{ token }, dispatch] = useStateValue();
 
   useEffect(() => {
-    const hash = getTokenUrl();
+    // Set token
+    const hash = getTokenFromResponse();
     window.location.hash = "";
+    let _token = hash.access_token;
 
-    const _token = hash.access_token;
-    
-    //Si token alors on récupére le compte spotify
-      if (_token) {
-        setToken(_token);
+    if (_token) {
+      s.setAccessToken(_token);
 
-        spotify.setAccessToken(_token);
+      dispatch({
+        type: "SET_TOKEN",
+        token: _token,
+      });
 
-        spotify.getMe().then(user => {
-        })
-
+      s.getPlaylist("37i9dQZEVXcJZyENOWUFo7").then((response) =>
         dispatch({
-          type: 'SET_USER',
-          user: user
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: response,
         })
+      );
 
-        spotify.getUserPlaylists().then((playlists) =>{ dispatch({
-          type: 'SET_PLAYLISTS',
-          playlists: playlists
+      s.getMyTopArtists().then((response) =>
+        dispatch({
+          type: "SET_TOP_ARTISTS",
+          top_artists: response,
+        })
+      );
+
+      dispatch({
+        type: "SET_SPOTIFY",
+        spotify: s,
+      });
+
+      s.getMe().then((user) => {
+        dispatch({
+          type: "SET_USER",
+          user,
         });
       });
-      }
 
-
-  }, [])
-
-
+      s.getUserPlaylists().then((playlists) => {
+        dispatch({
+          type: "SET_PLAYLISTS",
+          playlists,
+        });
+      });
+    }
+  }, [token, dispatch]);
 
   return (
-    <div className="App">
-      {
-        token ? 
-       <Player spotify={spotify}/>
-         :
-       <Login/>
-        
-      }
+    <div className="app">
+      {!token && <Login />}
+      {token && <Player spotify={s} />}
     </div>
   );
 }

@@ -1,40 +1,28 @@
-// redirection login spotify 
-
-export const authEndPoint = "https://accounts.spotify.com/authorize";
-
-// apres auth renvoie sur notre app
-const redirectUri = "http://localhost:3000/";
-
-// Id Client
-
+// https://developer.spotify.com/documentation/web-playback-sdk/quick-start/#
+export const authEndpoint = "https://accounts.spotify.com/authorize";
+// Replace with your app's client ID, redirect URI and desired scopes
 const clientId = "d4f423e2787e4b39accee72ecb9cc89e";
-
-// Scopes droit pour utiliser fonctionnalitées spotify
-
+const redirectUri = "http://localhost:3000/";
 const scopes = [
-    "user-read-currently-playing",
-    "user-read-recently-played",
-    "user-modify-playback-state",
-    "user-top-read",
-    "user-modify-playback-state"
-]
+  "user-read-currently-playing",
+  "user-read-recently-played",
+  "user-read-playback-state",
+  "user-top-read",
+  "user-modify-playback-state",
+];
 
-
-// Récupération du token en url de reponse
-
-export const getTokenUrl = () => {
-    return window.location.hash
+export const getTokenFromResponse = () => {
+  return window.location.hash
     .substring(1)
-    .split('&')
-    .reduce((intial, item) => {
+    .split("&")
+    .reduce((initial, item) => {
+      var parts = item.split("=");
+      initial[parts[0]] = decodeURIComponent(parts[1]);
 
-        var parts = item.split("=");
+      return initial;
+    }, {});
+};
 
-        intial[parts[0]] = decodeURIComponent(parts[1]);
-
-        return intial;
-    }, 
-    {});
-}
-
-export const loginUrl = `${authEndPoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`;
+export const accessUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+  "%20"
+)}&response_type=token&show_dialog=true`;
