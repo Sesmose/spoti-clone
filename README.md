@@ -5,7 +5,7 @@ A Spotify app clone in order to learn React and some particular elements in it, 
 
 ### How to Use
 
-Just like the real Spotify you can play musics, add them to your playlist etc
+Just like the real Spotify you can play musics, add them to your playlist etc (not working yet)
 
 
 ## Made with
